@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Page</title>
+    <title>2000-2010s Scavenger Hunt</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body onload="showPopup()">
@@ -11,7 +11,7 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closePopup()">&times;</span>
             <h2>Welcome to the 2000-2010s Scavenger Hunt!</h2>
-            <p>To play, you need to enter the correct video ID (the digits after v= of a youtube link). Enjoy the hunt for these old YouTube gems!</p>
+            <p>To play, you need to enter the correct video ID (the digits after v= of a YouTube link). Enjoy the hunt for these old YouTube gems!</p>
         </div>
     </div>
 
@@ -36,16 +36,11 @@
         <canvas id="confettiCanvas"></canvas> <!-- Canvas for confetti -->
     </div>
 
-    <!-- Music Box -->
-    <div class="music-box" id="musicBox">
-        <audio id="backgroundMusic" volume="0.5">
-            <source src="audio/Video_Game_Music_Seamless.mp3" type="audio/mpeg"> <!-- Replace with your music file -->
-            Your browser does not support the audio element.
-        </audio>
-        <!-- Only show the volume slider -->
-        <label for="volumeControl">Volume:</label>
-        <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5" onchange="adjustVolume()">
-    </div>
+    <!-- Success audio -->
+    <audio id="successAudio" preload="auto">
+        <source src="audio/yay.mp3" type="audio/mpeg"> <!-- Replace with your audio file -->
+        Your browser does not support the audio element.
+    </audio>
 
     <script>
         // Show the pop-up when the page loads
@@ -56,18 +51,6 @@
         // Close the pop-up when the close button is clicked
         function closePopup() {
             document.getElementById("popupModal").style.display = "none";
-            startMusic(); // Start music when pop-up is closed
-        }
-
-        function startMusic() {
-            var music = document.getElementById("backgroundMusic");
-            music.play();
-        }
-
-        function adjustVolume() {
-            var music = document.getElementById("backgroundMusic");
-            var volumeControl = document.getElementById("volumeControl");
-            music.volume = volumeControl.value;
         }
 
         function checkPassword() {
@@ -78,6 +61,7 @@
             if (enteredPassword === correctPassword) {
                 showSuccessMessage();
                 startConfetti(); // Start confetti
+                playSuccessAudio(); // Play success audio
                 setTimeout(function() {
                     window.location.href = "secondpage.html"; // Change to the next page URL
                 }, 3000); // Wait 3 seconds before redirecting
@@ -91,6 +75,11 @@
             const messageDiv = document.getElementById("message");
             messageDiv.innerHTML = "<img src='images/he-man-laughing.gif' alt='Success' width='100' height='100'>"; // Change to your success image URL
             messageDiv.classList.remove("error-message");
+        }
+
+        function playSuccessAudio() {
+            const audio = document.getElementById("successAudio");
+            audio.play();
         }
 
         // Confetti effect
