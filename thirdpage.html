@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Page</title>
+    <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+    <div class="container">
+        <div class="text-box">
+            <h2>Write Here:</h2>
+            <!-- This div will contain your static text -->
+            <div class="static-text">
+                <p>1. First bullet point.</p>
+                <p>2. Second bullet point.</p>
+                <p>3. Third bullet point.</p>
+            </div>
+        </div>
+        <div class="password-instruction">
+            <h2>Please Enter Your Password</h2>
+        </div>
+        <div class="password-box">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="checkPassword()">Submit</button>
+        </div>
+        <div id="message"></div>
+        <canvas id="confettiCanvas"></canvas> <!-- Canvas for confetti -->
+    </div>
+
+    <!-- Music Box -->
+    <div class="music-box" id="musicBox">
+        <audio id="backgroundMusic" volume="0.5">
+            <source src="https://example.com/music.mp3" type="audio/mpeg"> <!-- Replace with your music file -->
+            Your browser does not support the audio element.
+        </audio>
+        <!-- Only show the volume slider -->
+        <label for="volumeControl">Volume:</label>
+        <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5" onchange="adjustVolume()">
+    </div>
+
+    <script>
+        function startMusic() {
+            var music = document.getElementById("backgroundMusic");
+            music.play();
+        }
+
+        function adjustVolume() {
+            var music = document.getElementById("backgroundMusic");
+            var volumeControl = document.getElementById("volumeControl");
+            music.volume = volumeControl.value;
+        }
+
+        function checkPassword() {
+            const correctPassword = "12345"; // Set the correct password here
+            const enteredPassword = document.getElementById("password").value;
+            const messageDiv = document.getElementById("message");
+
+            if (enteredPassword === correctPassword) {
+                showSuccessMessage();
+                startConfetti(); // Start confetti
+                setTimeout(function() {
+                    window.location.href = "fourthpage.html"; // Change to the next page URL
+                }, 3000); // Wait 3 seconds before redirecting
+            } else {
+                messageDiv.innerHTML = "&#10060;"; // Display a large X for incorrect password
+                messageDiv.classList.add("error-message");
+            }
+        }
+
+        function showSuccessMessage() {
+            const messageDiv = document.getElementById("message");
+            messageDiv.innerHTML = "<img src='https://example.com/success.png' alt='Success' width='100' height='100'>"; // Change to your success image URL
+            messageDiv.classList.remove("error-message");
+        }
+
+        // Confetti effect
+        function startConfetti() {
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const confettiParticles = [];
+
+            for (let i = 0; i < 100; i++) {
+                confettiParticles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 4 + 1, // radius
+                    dx: Math.random() * 2 - 1, // horizontal speed
+                    dy: Math.random() * 2 + 1, // vertical speed
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)` // random color
+                });
+            }
+
+            function drawConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                confettiParticles.forEach((particle, i) => {
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.r, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                    particle.x += particle.dx;
+                    particle.y += particle.dy;
+
+                    if (particle.y > canvas.height) {
+                        confettiParticles[i].y = 0;
+                        confettiParticles[i].x = Math.random() * canvas.width;
+                    }
+                });
+                requestAnimationFrame(drawConfetti);
+            }
+
+            drawConfetti();
+        }
+    </script>
+</body>
+</html>
